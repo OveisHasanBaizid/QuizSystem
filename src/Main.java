@@ -25,8 +25,8 @@ public class Main {
             item = input.nextInt();
         }while (item>2 || item<1);
         switch (item){
-            case 1 -> register();
-            case 2 -> menuTypeLogin();
+            case 1 -> menuTypeLogin();
+            case 2 -> register();
             case 3 -> System.exit(0);
         }
         startMenu();
@@ -56,7 +56,7 @@ public class Main {
     public void loginAdmin(){
         System.out.println("* * * Login Admin * * *");
         String username , password ;
-
+        input.nextLine();
         System.out.print("Username: ");
         username = input.nextLine();
 
@@ -81,11 +81,11 @@ public class Main {
             item = input.nextInt();
         }while (item>5 || item<1);
         switch (item){
-            case 1 -> loginAdmin();
-            case 2 -> loginStudent();
-            case 3 -> startMenu();
-            case 4 -> loginAdmin();
-            case 5 -> loginStudent();
+            case 1 -> new CRUD_Professor(professors);
+            case 2 -> new CRUD_Course(courses);
+            case 3 -> new CRUD_Student(students);
+            case 4 -> new CRUD_Quiz(quizzes);
+            case 5 -> menuTypeLogin();
         }
         menuAdmin();
     }
