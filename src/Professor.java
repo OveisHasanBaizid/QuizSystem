@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-
-public class Professor {
-
+public class Professor extends User{
+    public Professor(String username, String password) {
+        super(username, password);
+    }
 
 }
