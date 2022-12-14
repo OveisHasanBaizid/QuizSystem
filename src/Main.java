@@ -3,15 +3,7 @@ import java.util.Scanner;
 
 public class Main {
     Scanner input = new Scanner(System.in);
-    ArrayList<Professor> professors;
-    ArrayList<Student> students;
-    ArrayList<Quiz> quizzes;
-    ArrayList<Course> courses;
     public Main() {
-        professors = new ArrayList<>();
-        students = new ArrayList<>();
-        quizzes = new ArrayList<>();
-        courses = new ArrayList<>();
         startMenu();
     }
     public void startMenu(){
@@ -76,15 +68,18 @@ public class Main {
             System.out.println("2.CRUD Course");
             System.out.println("3.CRUD Student");
             System.out.println("4.CRUD Quiz");
-            System.out.println("5.Back");
+            System.out.println("5.CRUD Questions");
+            System.out.println("6.Reporting Quizzes");
+            System.out.println("7.Reporting Courses");
+            System.out.println("8.Back");
             System.out.print("Please select one of the options : ");
             item = input.nextInt();
-        }while (item>5 || item<1);
+        }while (item>8 || item<1);
         switch (item){
-            case 1 -> new CRUD_Professor(professors);
-            case 2 -> new CRUD_Course(courses);
-            case 3 -> new CRUD_Student(students);
-            case 4 -> new CRUD_Quiz(quizzes);
+            case 1 -> new CRUD_Professor();
+            case 2 -> new CRUD_Course();
+            case 3 -> new CRUD_Student();
+            case 4 -> new CRUD_Quiz();
             case 5 -> menuTypeLogin();
         }
         menuAdmin();

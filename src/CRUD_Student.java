@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Student {
-    ArrayList<Student> students;
     Scanner input = new Scanner(System.in);
-    public CRUD_Student(ArrayList<Student> students) {
-        this.students = students;
+    public CRUD_Student() {
         menu();
     }
     public void menu(){

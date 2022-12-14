@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Professor {
-    ArrayList<Professor> professors;
     Scanner input = new Scanner(System.in);
-    public CRUD_Professor(ArrayList<Professor> professors) {
-        this.professors = professors;
+    public CRUD_Professor() {
         menu();
     }
     public void menu(){
@@ -31,11 +29,50 @@ public class CRUD_Professor {
 
     public void create(){
         System.out.println("* * * Create Professor * * *");
+        System.out.print("Name : ");
+        String name = input.nextLine();
+        System.out.print("username : ");
+        String username = input.nextLine();
+        System.out.print("password : ");
+        String password = input.nextLine();
+        if (DataBase.addProfessor(new Professor(name,username,password)))
+            System.out.println("The username entered is duplicate.");
+        else
+            System.out.println("Professor added successfully.");
     }
     public void edit(){
         System.out.println("* * * Edit Professor * * *");
+        ArrayList<Professor> professors = DataBase.getProfessors();
+        int i=1;
+        for (Professor p:professors) {
+            System.out.println((i)+"."+p.getName());
+        }
+        int item=0;
+        do {
+            System.out.print("Please select one of the professors : ");
+            item = input.nextInt();
+        }while (item>professors.size() || item<1);
+
+        System.out.print("Name : ");
+        professors.get(item-1).setName(input.nextLine());
+        System.out.print("Password : ");
+        professors.get(item-1).setPassword(input.nextLine());
+
+        System.out.println("Professor edited successfully.");
     }
     public void remove(){
         System.out.println("* * * Remove Professor * * *");
+        ArrayList<Professor> professors = DataBase.getProfessors();
+        int i=1;
+        for (Professor p:professors) {
+            System.out.println((i)+"."+p.getName());
+        }
+        int item=0;
+        do {
+            System.out.print("Please select one of the professors : ");
+            item = input.nextInt();
+        }while (item>professors.size() || item<1);
+        DataBase.removeProfessor(professors.get(item-1));
+        System.out.println("Professor removed successfully.");
     }
 }

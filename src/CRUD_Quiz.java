@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Quiz {
-    ArrayList<Quiz> quizzes;
     Scanner input = new Scanner(System.in);
-    public CRUD_Quiz(ArrayList<Quiz> quizzes) {
-        this.quizzes = quizzes;
+    public CRUD_Quiz() {
         menu();
     }
     public void menu(){

@@ -3,10 +3,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class CRUD_Course {
-    ArrayList<Course> courses;
     Scanner input = new Scanner(System.in);
-    public CRUD_Course(ArrayList<Course> courses) {
-        this.courses = courses;
+    public CRUD_Course() {
         menu();
     }
     public void menu(){
