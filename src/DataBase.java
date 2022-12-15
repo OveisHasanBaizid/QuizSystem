@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class DataBase {
     static ArrayList<User> users = new ArrayList<>();
@@ -73,5 +74,35 @@ public class DataBase {
                 pro.add((Professor) user1);
         }
         return pro;
+    }
+    public static ArrayList<Student> getStudents(){
+        ArrayList<Student> students = new ArrayList<>();
+        for (User user1:users) {
+            if (user1 instanceof Student)
+                students.add((Student) user1);
+        }
+        return students;
+    }
+    public static ArrayList<Student> getStudentsCourse(ArrayList<Integer> studentsCode){
+        ArrayList<Student> students = new ArrayList<>();
+        for (Student s:getStudents()) {
+            if (studentsCode.contains(s.getCode()))
+                students.add(s);
+        }
+        return students;
+    }
+    public static Course selectCourse(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("List Courses : ");
+        int i=1;
+        for (Course c:courses) {
+            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
+        }
+        int itemCourse=0;
+        do {
+            System.out.print("Please select one of the courses : ");
+            itemCourse = input.nextInt();
+        }while (itemCourse>courses.size() || itemCourse<1);
+        return courses.get(itemCourse-1);
     }
 }
