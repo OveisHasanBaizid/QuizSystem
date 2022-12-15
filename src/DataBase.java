@@ -7,16 +7,16 @@ public class DataBase {
     public DataBase() {
 
     }
-    public static boolean addProfessor(Professor professor){
-        if (existUser(professor))
+    public static boolean addUser(User user){
+        if (existUser(user))
             return false;
-        users.add(professor);
+        users.add(user);
         return true;
     }
-    public static boolean removeProfessor(Professor professor){
-        if (!existUser(professor))
+    public static boolean removeUser(User user){
+        if (!existUser(user))
             return false;
-        users.remove(professor);
+        users.remove(user);
         return true;
     }
     public static boolean existUser(User user){
@@ -25,6 +25,46 @@ public class DataBase {
                 return true;
         }
         return false;
+    }
+    public static boolean addCourse(Course course){
+        if (existProfessor(course.getProfessor()))
+            return false;
+        courses.add(course);
+        return true;
+    }
+    public static boolean removeCourse(Course course){
+        if (!existCourse(course.getCode()))
+            return false;
+        users.remove(course);
+        return true;
+    }
+    public static boolean existCourse(int code){
+        for (Course c: courses) {
+            if (c.getCode()==code)
+                return true;
+        }
+        return false;
+    }
+    public static boolean existProfessor(int code){
+        for (User u:users) {
+            if (u.getCode()==code && u instanceof Professor)
+                return true;
+        }
+        return false;
+    }
+    public static Quiz getQuiz(int code){
+        for (Quiz q:quizzes) {
+            if (q.getCode()==code)
+                return q;
+        }
+        return null;
+    }
+    public static boolean removeQuiz(int code){
+        Quiz quiz = getQuiz(code);
+        if (quiz==null)
+            return false;
+        quizzes.remove(quiz);
+        return true;
     }
     public static ArrayList<Professor> getProfessors(){
         ArrayList<Professor> pro = new ArrayList<>();

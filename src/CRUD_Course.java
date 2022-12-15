@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CRUD_Course {
@@ -30,11 +29,53 @@ public class CRUD_Course {
 
     public void create(){
         System.out.println("* * * Create Course * * *");
+        System.out.print("Name : ");
+        String name = input.nextLine();
+        System.out.print("Code Professor : ");
+        int codeProfessor = input.nextInt();
+        Course course = new Course(name , codeProfessor);
+        if (!DataBase.addCourse(course))
+            System.out.println("There is no professor with this code");
+        else
+            System.out.println("Course added successfully.");
     }
     public void edit(){
         System.out.println("* * * Edit Course * * *");
+        ArrayList<Course> courses = DataBase.courses;
+        if (courses.size()==0){
+            System.out.println("The list of courses is empty.");
+            return;
+        }
+        int i=1;
+        for (Course c:courses) {
+            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
+        }
+        int item=0;
+        do {
+            System.out.print("Please select one of the courses : ");
+            item = input.nextInt();
+        }while (item>courses.size() || item<1);
+        input.nextLine();
+        System.out.print("Name : ");
+        courses.get(item-1).setName(input.nextLine());
+        System.out.println("Course edited successfully.");
     }
     public void remove(){
         System.out.println("* * * Remove Course * * *");
+        ArrayList<Course> courses = DataBase.courses;
+        if (courses.size()==0){
+            System.out.println("The list of courses is empty.");
+            return;
+        }
+        int i=1;
+        for (Course c:courses) {
+            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
+        }
+        int item=0;
+        do {
+            System.out.print("Please select one of the courses : ");
+            item = input.nextInt();
+        }while (item>courses.size() || item<1);
+        DataBase.removeCourse(courses.get(item-1));
     }
 }

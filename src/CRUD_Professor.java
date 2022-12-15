@@ -29,13 +29,14 @@ public class CRUD_Professor {
 
     public void create(){
         System.out.println("* * * Create Professor * * *");
+        input.nextLine();
         System.out.print("Name : ");
         String name = input.nextLine();
         System.out.print("username : ");
         String username = input.nextLine();
         System.out.print("password : ");
         String password = input.nextLine();
-        if (DataBase.addProfessor(new Professor(name,username,password)))
+        if (DataBase.addUser(new Professor(name,username,password)))
             System.out.println("The username entered is duplicate.");
         else
             System.out.println("Professor added successfully.");
@@ -43,6 +44,10 @@ public class CRUD_Professor {
     public void edit(){
         System.out.println("* * * Edit Professor * * *");
         ArrayList<Professor> professors = DataBase.getProfessors();
+        if (professors.size()==0){
+            System.out.println("The list of professors is empty.");
+            return;
+        }
         int i=1;
         for (Professor p:professors) {
             System.out.println((i)+"."+p.getName());
@@ -52,7 +57,7 @@ public class CRUD_Professor {
             System.out.print("Please select one of the professors : ");
             item = input.nextInt();
         }while (item>professors.size() || item<1);
-
+        input.nextLine();
         System.out.print("Name : ");
         professors.get(item-1).setName(input.nextLine());
         System.out.print("Password : ");
@@ -63,6 +68,10 @@ public class CRUD_Professor {
     public void remove(){
         System.out.println("* * * Remove Professor * * *");
         ArrayList<Professor> professors = DataBase.getProfessors();
+        if (professors.size()==0){
+            System.out.println("The list of professors is empty.");
+            return;
+        }
         int i=1;
         for (Professor p:professors) {
             System.out.println((i)+"."+p.getName());
@@ -72,7 +81,7 @@ public class CRUD_Professor {
             System.out.print("Please select one of the professors : ");
             item = input.nextInt();
         }while (item>professors.size() || item<1);
-        DataBase.removeProfessor(professors.get(item-1));
+        DataBase.removeUser(professors.get(item-1));
         System.out.println("Professor removed successfully.");
     }
 }
