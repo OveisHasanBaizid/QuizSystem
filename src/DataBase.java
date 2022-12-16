@@ -5,6 +5,7 @@ public class DataBase {
     static ArrayList<User> users = new ArrayList<>();
     static ArrayList<Quiz> quizzes = new ArrayList<>();
     static ArrayList<Course> courses = new ArrayList<>();
+    static ArrayList<Question> questions = new ArrayList<>();
     public DataBase() {
 
     }
@@ -67,6 +68,13 @@ public class DataBase {
         quizzes.remove(quiz);
         return true;
     }
+    public static boolean removeQuestion(int code){
+        Question question = getQuestion(code);
+        if (question==null)
+            return false;
+        questions.remove(question);
+        return true;
+    }
     public static ArrayList<Professor> getProfessors(){
         ArrayList<Professor> pro = new ArrayList<>();
         for (User user1:users) {
@@ -104,5 +112,12 @@ public class DataBase {
             itemCourse = input.nextInt();
         }while (itemCourse>courses.size() || itemCourse<1);
         return courses.get(itemCourse-1);
+    }
+    public static Question getQuestion(int code){
+        for (Question q:questions) {
+            if (q.getCode()==code)
+                return q;
+        }
+        return null;
     }
 }
