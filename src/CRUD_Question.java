@@ -1,31 +1,15 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class CRUD_Questions {
+public class CRUD_Question {
     Scanner input = new Scanner(System.in);
     Course course;
     Quiz quiz;
 
-    public CRUD_Questions() {
+    public CRUD_Question() {
         course = DataBase.selectCourse();
-        quiz = selectQuiz();
+        quiz = DataBase.selectQuiz(course);
         menu();
     }
-
-    public Quiz selectQuiz() {
-        System.out.println("List Quiz : ");
-        for (int i = 0; i < course.getQuizzes().size(); i++) {
-            Quiz quiz = new Quiz();
-            System.out.println((i) + "." + quiz.getCode());
-        }
-        int itemQuiz = 0;
-        do {
-            System.out.print("Please select one of the courses : ");
-            itemQuiz = input.nextInt();
-        } while (itemQuiz > course.getQuizzes().size() || itemQuiz < 1);
-        return DataBase.getQuiz(course.getQuizzes().get(itemQuiz - 1));
-    }
-
     public void menu() {
         System.out.println("* * * Menu CRUD Questions * * *");
         int item = 0;

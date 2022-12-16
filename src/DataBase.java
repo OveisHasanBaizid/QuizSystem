@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DataBase {
+    static Scanner input = new Scanner(System.in);
     static ArrayList<User> users = new ArrayList<>();
     static ArrayList<Quiz> quizzes = new ArrayList<>();
     static ArrayList<Course> courses = new ArrayList<>();
@@ -100,7 +101,7 @@ public class DataBase {
         return students;
     }
     public static Course selectCourse(){
-        Scanner input = new Scanner(System.in);
+
         System.out.println("List Courses : ");
         int i=1;
         for (Course c:courses) {
@@ -112,6 +113,19 @@ public class DataBase {
             itemCourse = input.nextInt();
         }while (itemCourse>courses.size() || itemCourse<1);
         return courses.get(itemCourse-1);
+    }
+    public static Quiz selectQuiz(Course course) {
+        System.out.println("List Quiz : ");
+        for (int i = 0; i < course.getQuizzes().size(); i++) {
+            Quiz quiz = new Quiz();
+            System.out.println((i) + "." + quiz.getCode());
+        }
+        int itemQuiz = 0;
+        do {
+            System.out.print("Please select one of the quizzes : ");
+            itemQuiz = input.nextInt();
+        } while (itemQuiz > course.getQuizzes().size() || itemQuiz < 1);
+        return DataBase.getQuiz(course.getQuizzes().get(itemQuiz - 1));
     }
     public static Question getQuestion(int code){
         for (Question q:questions) {

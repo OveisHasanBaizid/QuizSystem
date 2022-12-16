@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -80,7 +79,10 @@ public class Main {
             case 2 -> new CRUD_Course();
             case 3 -> new CRUD_Student();
             case 4 -> new CRUD_Quiz();
-            case 5 -> menuTypeLogin();
+            case 5 -> new CRUD_Question();
+            case 6 -> new CRUD_Quiz();
+            case 7 -> new CRUD_Quiz();
+            case 8 -> menuTypeLogin();
         }
         menuAdmin();
     }
