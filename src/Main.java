@@ -16,7 +16,7 @@ public class Main {
             System.out.println("3.Exit");
             System.out.print("Please select one of the options : ");
             item = input.nextInt();
-        } while (item > 2 || item < 1);
+        } while (item > 3 || item < 1);
         switch (item) {
             case 1 -> menuTypeLogin();
             case 2 -> register();
@@ -34,7 +34,7 @@ public class Main {
             System.out.println("3.Back");
             System.out.print("Please select one of the options : ");
             item = input.nextInt();
-        } while (item > 2 || item < 1);
+        } while (item > 3 || item < 1);
         switch (item) {
             case 1 -> loginAdmin();
             case 2 -> loginStudent();
