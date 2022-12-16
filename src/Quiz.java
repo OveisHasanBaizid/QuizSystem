@@ -45,4 +45,33 @@ public class Quiz {
     public void setAverage(float average) {
         this.average = average;
     }
+    public void calculateAverage(){
+        float sum = 0;
+        int counter=0;
+        for (Integer s: students){
+            Student student = DataBase.getStudent(s);
+            if (student!=null){
+                float score = student.getScoreQuiz(getCode());
+                if (score!=-1){
+                    sum+=score;
+                    counter++;
+                }
+            }
+        }
+        sum/=counter;
+        this.average = sum;
+    }
+    public int studentsParticipating(){
+        int counter=0;
+        for (Integer s: students){
+            Student student = DataBase.getStudent(s);
+            if (student!=null){
+                float score = student.getScoreQuiz(getCode());
+                if (score!=-1){
+                    counter++;
+                }
+            }
+        }
+        return counter;
+    }
 }

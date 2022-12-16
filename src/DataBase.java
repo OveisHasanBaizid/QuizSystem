@@ -55,6 +55,13 @@ public class DataBase {
         }
         return false;
     }
+    public static Student getStudent(int code){
+        for (User u:users) {
+            if (u.getCode()==code && u instanceof Student)
+                return (Student) u;
+        }
+        return null;
+    }
     public static Quiz getQuiz(int code){
         for (Quiz q:quizzes) {
             if (q.getCode()==code)
@@ -101,7 +108,6 @@ public class DataBase {
         return students;
     }
     public static Course selectCourse(){
-
         System.out.println("List Courses : ");
         int i=1;
         for (Course c:courses) {
