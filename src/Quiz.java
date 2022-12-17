@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Quiz {
-    private int baseID = 1;
+public class Quiz implements Serializable {
+    private static int baseID = 1;
     private int code;
     private ArrayList<Integer> questions;
     private ArrayList<Integer> students;
@@ -73,5 +74,8 @@ public class Quiz {
             }
         }
         return counter;
+    }
+    static void increaseBaseID(){
+        baseID++;
     }
 }

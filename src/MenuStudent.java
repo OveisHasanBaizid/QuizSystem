@@ -27,21 +27,11 @@ public class MenuStudent {
     }
     public void listQuizzes(){
         Course course = DataBase.getCourse(student.getCode());
-        if (course.getQuizzes().size()==0){
+        if (course!= null && course.getQuizzes().size()==0){
             System.out.println("The list of quizzes is empty.");
             return;
         }
-        int i =0;
-        for (Integer integer:course.getQuizzes()) {
-            Quiz quiz = DataBase.getQuiz(integer);
-            if (student.getScoreQuiz(quiz.getCode())!=-1)
-                System.out.println((i++)+"."+quiz.getCode());
-        }
-        Quiz quiz;
-        do {
-            System.out.print("Please enter code  one of the quizzes : ");
-            quiz = DataBase.getQuiz(input.nextInt());
-        } while (quiz==null);
+        Quiz quiz = DataBase.selectQuiz(course);
         startQuiz(quiz);
     }
     public void startQuiz(Quiz quiz){
@@ -54,18 +44,20 @@ public class MenuStudent {
         float score = 0;
         for (int i = 0; i < quiz.getQuestions().size() ; i++) {
             Question question = DataBase.getQuestion(quiz.getQuestions().get(i));
-            System.out.println((i+1)+" of "+quiz.getQuestions().size()+" . "+question.getText());
-            System.out.print("Answer : ");
-            answer = input.nextLine();
-            if (question.getText().compareToIgnoreCase(answer)==0)
-                score+=question.getScore();
+            if (question!=null){
+                System.out.println((i+1)+" of "+quiz.getQuestions().size()+" . "+question.getText());
+                System.out.print("Answer : ");
+                answer = input.nextLine();
+                if (question.getText().compareToIgnoreCase(answer)==0)
+                    score+=question.getScore();
+            }
         }
         student.getReportQuizzes().add(new ReportQuiz(quiz.getCode(),score));
         System.out.println("Quiz score : "+score);
     }
     public void historyQuizzes(){
         Course course = DataBase.getCourse(student.getCode());
-        if (course.getQuizzes().size()==0){
+        if (course!=null && course.getQuizzes().size()==0){
             System.out.println("The list of quizzes is empty.");
             return;
         }

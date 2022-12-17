@@ -1,14 +1,19 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Student {
     Scanner input = new Scanner(System.in);
     public CRUD_Student() {
-        menu();
+        try {
+            menu();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void menu(){
+    public void menu() throws IOException {
         System.out.println("* * * Menu CRUD Student * * *");
-        int item =0;
+        int item;
         do {
             System.out.println("1.Create");
             System.out.println("2.Edit");
@@ -27,7 +32,7 @@ public class CRUD_Student {
         menu();
     }
 
-    public void create(){
+    public void create() throws IOException {
         System.out.println("* * * Create Student * * *");
         input.nextLine();
         System.out.print("Name : ");
@@ -40,60 +45,56 @@ public class CRUD_Student {
         Course course = DataBase.selectCourse();
 
         Student student = new Student(username,password,name,course.getCode());
-
-        if (DataBase.addUser(student))
+        if (!DataBase.addUser(student))
             System.out.println("The username entered is duplicate.");
         else {
             course.getStudents().add(student.getCode());
-            System.out.println("Professor added successfully.");
+            DataBase.saveUser();
+            System.out.println("Student added successfully.");
         }
     }
-    public void edit(){
+    public void edit() throws IOException {
         System.out.println("* * * Edit Student * * *");
         Course course = DataBase.selectCourse();
-
-        ArrayList<Student> studentsCourse = DataBase.getStudentsCourse(course.getStudents());
-
-        int i=1;
-        for (Student s:studentsCourse) {
-            System.out.println((i)+"."+s.getName());
+        if (course.getStudents().size()==0){
+            System.out.println("The list of students is empty.");
+            return ;
         }
-        int item=0;
-        do {
-            System.out.print("Please select one of the professors : ");
-            item = input.nextInt();
-        }while (item>studentsCourse.size() || item<1);
+        Student student = selectStudent(course);
         input.nextLine();
 
         System.out.print("Name : ");
-        studentsCourse.get(item-1).setName(input.nextLine());
+        student.setName(input.nextLine());
         System.out.print("Password : ");
-        studentsCourse.get(item-1).setPassword(input.nextLine());
-
+        student.setPassword(input.nextLine());
+        DataBase.saveUser();
         System.out.println("Student edited successfully.");
-
     }
-    public void remove(){
+    public void remove() throws IOException {
         System.out.println("* * * Remove Student * * *");
         Course course = DataBase.selectCourse();
+        if (course.getStudents().size()==0){
+            System.out.println("The list of students is empty.");
+            return ;
+        }
+        Student student = selectStudent(course);
 
+        course.getStudents().remove(student.getCode());
+        DataBase.removeUser(student);
+        DataBase.saveUser();
+        System.out.println("Student removed successfully.");
+    }
+    public Student selectStudent(Course course){
         ArrayList<Student> studentsCourse = DataBase.getStudentsCourse(course.getStudents());
-
         int i=1;
         for (Student s:studentsCourse) {
             System.out.println((i)+"."+s.getName());
         }
         int item=0;
         do {
-            System.out.print("Please select one of the professors : ");
+            System.out.print("Please select one of the students : ");
             item = input.nextInt();
         }while (item>studentsCourse.size() || item<1);
-        input.nextLine();
-
-        Student student = studentsCourse.get(item-1);
-
-        course.getStudents().remove(student.getCode());
-        DataBase.removeUser(student);
-        System.out.println("Professor removed successfully.");
+        return studentsCourse.get(item-1);
     }
 }

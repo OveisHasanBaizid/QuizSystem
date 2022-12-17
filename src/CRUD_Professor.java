@@ -1,12 +1,17 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Professor {
     Scanner input = new Scanner(System.in);
     public CRUD_Professor() {
-        menu();
+        try {
+            menu();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void menu(){
+    public void menu() throws IOException {
         System.out.println("* * * Menu CRUD Professor * * *");
         int item =0;
         do {
@@ -27,7 +32,7 @@ public class CRUD_Professor {
         menu();
     }
 
-    public void create(){
+    public void create() throws IOException {
         System.out.println("* * * Create Professor * * *");
         input.nextLine();
         System.out.print("Name : ");
@@ -36,52 +41,50 @@ public class CRUD_Professor {
         String username = input.nextLine();
         System.out.print("password : ");
         String password = input.nextLine();
-        if (DataBase.addUser(new Professor(name,username,password)))
+        if (!DataBase.addUser(new Professor(name,username,password)))
             System.out.println("The username entered is duplicate.");
-        else
+        else{
+            DataBase.saveUser();
             System.out.println("Professor added successfully.");
+        }
     }
-    public void edit(){
+    public void edit() throws IOException {
         System.out.println("* * * Edit Professor * * *");
-        ArrayList<Professor> professors = DataBase.getProfessors();
-        if (professors.size()==0){
+        if (DataBase.getProfessors().size()==0){
             System.out.println("The list of professors is empty.");
-            return;
+            return ;
         }
-        int i=1;
-        for (Professor p:professors) {
-            System.out.println((i)+"."+p.getName());
-        }
-        int item=0;
-        do {
-            System.out.print("Please select one of the professors : ");
-            item = input.nextInt();
-        }while (item>professors.size() || item<1);
+        Professor professor = selectProfessor();
         input.nextLine();
         System.out.print("Name : ");
-        professors.get(item-1).setName(input.nextLine());
+        professor.setName(input.nextLine());
         System.out.print("Password : ");
-        professors.get(item-1).setPassword(input.nextLine());
-
+        professor.setPassword(input.nextLine());
+        DataBase.saveUser();
         System.out.println("Professor edited successfully.");
     }
-    public void remove(){
+    public void remove() throws IOException {
         System.out.println("* * * Remove Professor * * *");
-        ArrayList<Professor> professors = DataBase.getProfessors();
-        if (professors.size()==0){
+        if (DataBase.getProfessors().size()==0){
             System.out.println("The list of professors is empty.");
-            return;
+            return ;
         }
+        Professor professor = selectProfessor();
+        DataBase.removeUser(professor);
+        DataBase.saveUser();
+        System.out.println("Professor removed successfully.");
+    }
+    public Professor selectProfessor(){
+        ArrayList<Professor> professors = DataBase.getProfessors();
         int i=1;
         for (Professor p:professors) {
-            System.out.println((i)+"."+p.getName());
+            System.out.println((i++)+"."+p.getName());
         }
         int item=0;
         do {
             System.out.print("Please select one of the professors : ");
             item = input.nextInt();
         }while (item>professors.size() || item<1);
-        DataBase.removeUser(professors.get(item-1));
-        System.out.println("Professor removed successfully.");
+        return professors.get(item-1);
     }
 }

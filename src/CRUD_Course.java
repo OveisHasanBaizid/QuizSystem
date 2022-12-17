@@ -1,12 +1,17 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Course {
     Scanner input = new Scanner(System.in);
     public CRUD_Course() {
-        menu();
+        try {
+            menu();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void menu(){
+    public void menu() throws IOException {
         System.out.println("* * * Menu CRUD Course * * *");
         int item =0;
         do {
@@ -27,8 +32,9 @@ public class CRUD_Course {
         menu();
     }
 
-    public void create(){
+    public void create() throws IOException {
         System.out.println("* * * Create Course * * *");
+        input.nextLine();
         System.out.print("Name : ");
         String name = input.nextLine();
         System.out.print("Code Professor : ");
@@ -36,46 +42,33 @@ public class CRUD_Course {
         Course course = new Course(name , codeProfessor);
         if (!DataBase.addCourse(course))
             System.out.println("There is no professor with this code");
-        else
+        else{
+            DataBase.saveCourse();
             System.out.println("Course added successfully.");
+        }
     }
-    public void edit(){
+    public void edit() throws IOException {
         System.out.println("* * * Edit Course * * *");
-        ArrayList<Course> courses = DataBase.courses;
-        if (courses.size()==0){
+        if (DataBase.courses.size()==0){
             System.out.println("The list of courses is empty.");
             return;
         }
-        int i=1;
-        for (Course c:courses) {
-            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
-        }
-        int item=0;
-        do {
-            System.out.print("Please select one of the courses : ");
-            item = input.nextInt();
-        }while (item>courses.size() || item<1);
+        Course course = DataBase.selectCourse();
         input.nextLine();
         System.out.print("Name : ");
-        courses.get(item-1).setName(input.nextLine());
+        course.setName(input.nextLine());
+        DataBase.saveCourse();
         System.out.println("Course edited successfully.");
     }
-    public void remove(){
+    public void remove() throws IOException {
         System.out.println("* * * Remove Course * * *");
-        ArrayList<Course> courses = DataBase.courses;
-        if (courses.size()==0){
+        if (DataBase.courses.size()==0){
             System.out.println("The list of courses is empty.");
             return;
         }
-        int i=1;
-        for (Course c:courses) {
-            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
-        }
-        int item=0;
-        do {
-            System.out.print("Please select one of the courses : ");
-            item = input.nextInt();
-        }while (item>courses.size() || item<1);
-        DataBase.removeCourse(courses.get(item-1));
+        Course course = DataBase.selectCourse();
+        DataBase.removeCourse(course);
+        DataBase.saveCourse();
+        System.out.println("Course removed successfully.");
     }
 }

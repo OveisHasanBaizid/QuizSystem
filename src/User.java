@@ -1,4 +1,6 @@
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private static int baseID = 1;
     private int code;
     private String username;
@@ -32,5 +34,8 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    static void increaseBaseID(){
+        baseID++;
     }
 }

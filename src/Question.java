@@ -1,5 +1,7 @@
-public class Question {
-    private int baseID = 1;
+import java.io.Serializable;
+
+public class Question implements Serializable {
+    private static int baseID = 1;
     private int code;
     private String text;
     private String answer;
@@ -42,5 +44,8 @@ public class Question {
 
     public void setScore(float score) {
         this.score = score;
+    }
+    static void increaseBaseID(){
+        baseID++;
     }
 }

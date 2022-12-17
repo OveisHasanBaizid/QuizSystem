@@ -3,7 +3,15 @@ import java.util.Scanner;
 public class Main {
     Scanner input = new Scanner(System.in);
 
-    public Main() {
+    public Main(){
+        try {
+            DataBase.readCourse();
+            DataBase.readUser();
+            DataBase.readQuiz();
+            DataBase.readQuestion();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         startMenu();
     }
 

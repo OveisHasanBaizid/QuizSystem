@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CRUD_Question {
@@ -7,10 +8,18 @@ public class CRUD_Question {
 
     public CRUD_Question() {
         course = DataBase.selectCourse();
+        if (course.getQuizzes().size()==0){
+            System.out.println("The list of questions is empty.");
+            return;
+        }
         quiz = DataBase.selectQuiz(course);
-        menu();
+        try {
+            menu();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void menu() {
+    public void menu() throws IOException {
         System.out.println("* * * Menu CRUD Questions * * *");
         int item = 0;
         do {
@@ -31,7 +40,7 @@ public class CRUD_Question {
         menu();
     }
 
-    public void create() {
+    public void create() throws IOException {
         System.out.println("* * * Create Question * * *");
         input.nextLine();
         System.out.print("Text : ");
@@ -42,26 +51,14 @@ public class CRUD_Question {
         float score = input.nextFloat();
         Question question = new Question(text, answer, score);
         quiz.getQuestions().add(question.getCode());
+        DataBase.saveQuestion();
+        DataBase.saveQuiz();
         System.out.println("Question added successfully.");
     }
 
-    public void edit() {
+    public void edit() throws IOException {
         System.out.println("* * * Edit Question * * *");
-        if (quiz.getQuestions().size()==0){
-            System.out.println("The list of questions is empty.");
-            return;
-        }
-        for (int i = 0; i < quiz.getQuestions().size(); i++) {
-            Question question = DataBase.getQuestion(quiz.getQuestions().get(i));
-            System.out.println((i) + "." + question.getText());
-        }
-        int itemQuestion = 0;
-        do {
-            System.out.print("Please select one of the questions : ");
-            itemQuestion = input.nextInt();
-        } while (itemQuestion > quiz.getQuestions().size() || itemQuestion < 1);
-
-        Question question = DataBase.getQuestion(quiz.getQuestions().get(itemQuestion-1));
+        Question question = selectQuestion();
 
         input.nextLine();
 
@@ -71,17 +68,24 @@ public class CRUD_Question {
         question.setAnswer(input.nextLine());
         System.out.print("Score : ");
         question.setScore(input.nextFloat());
-
+        DataBase.saveQuestion();
         System.out.println("Question edited successfully.");
-
     }
 
-    public void remove() {
+    public void remove() throws IOException {
         System.out.println("* * * Remove Question * * *");
         if (quiz.getQuestions().size()==0){
             System.out.println("The list of questions is empty.");
             return;
         }
+        Question question = selectQuestion();
+        quiz.getQuestions().remove(question.getCode());
+        DataBase.questions.remove(question);
+        DataBase.saveQuestion();
+        DataBase.saveQuiz();
+        System.out.println("Question removed successfully.");
+    }
+    public Question selectQuestion(){
         for (int i = 0; i < quiz.getQuestions().size(); i++) {
             Question question = DataBase.getQuestion(quiz.getQuestions().get(i));
             System.out.println((i) + "." + question.getText());
@@ -91,8 +95,6 @@ public class CRUD_Question {
             System.out.print("Please select one of the questions : ");
             itemQuestion = input.nextInt();
         } while (itemQuestion > quiz.getQuestions().size() || itemQuestion < 1);
-        DataBase.removeQuestion(quiz.getQuestions().get(itemQuestion));
-        quiz.getQuestions().remove(itemQuestion-1);
-        System.out.println("Question removed successfully.");
+        return DataBase.getQuestion(quiz.getQuestions().get(itemQuestion-1));
     }
 }

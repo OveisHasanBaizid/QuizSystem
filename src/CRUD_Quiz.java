@@ -1,14 +1,28 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CRUD_Quiz {
     Scanner input = new Scanner(System.in);
+    Course course;
+
     public CRUD_Quiz() {
-        menu();
+        if (DataBase.courses.size() == 0) {
+            System.out.println("The list of course is empty.");
+            return;
+        }
+        course = DataBase.selectCourse();
+
+        try {
+            menu();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void menu(){
+
+    public void menu() throws IOException {
         System.out.println("* * * Menu CRUD Quiz * * *");
-        int item =0;
+        int item = 0;
         do {
             System.out.println("1.Create");
             System.out.println("2.Edit");
@@ -16,10 +30,10 @@ public class CRUD_Quiz {
             System.out.println("4.Back");
             System.out.print("Please select one of the options : ");
             item = input.nextInt();
-        }while (item>4 || item<1);
-        if (item==4)
+        } while (item > 4 || item < 1);
+        if (item == 4)
             return;
-        switch (item){
+        switch (item) {
             case 1 -> create();
             case 2 -> edit();
             case 3 -> remove();
@@ -27,72 +41,31 @@ public class CRUD_Quiz {
         menu();
     }
 
-    public void create(){
+    public void create() throws IOException {
         System.out.println("* * * Create Quiz * * *");
-        ArrayList<Course> courses = DataBase.courses;
-        if (courses.size()==0){
-            System.out.println("The list of courses is empty.");
-            return;
-        }
-        System.out.println("List Courses : ");
-        int i=1;
-        for (Course c:courses) {
-            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
-        }
-        int item=0;
-        do {
-            System.out.print("Please select one of the courses : ");
-            item = input.nextInt();
-        }while (item>courses.size() || item<1);
-        Course course = courses.get(item-1);
         Quiz quiz = new Quiz();
         DataBase.quizzes.add(quiz);
         course.getQuizzes().add(quiz.getCode());
-        System.out.println("Professor added successfully.");
+        DataBase.saveQuiz();
+        DataBase.saveCourse();
+        System.out.println("Quiz added successfully.");
     }
-    public void edit(){
+
+    public void edit() {
         System.out.println("* * * Edit Quiz * * *");
+        System.out.println("The quiz cannot be edited.");
     }
-    public void remove(){
+
+    public void remove() throws IOException {
         System.out.println("* * * Remove Quiz * * *");
-        ArrayList<Course> courses = DataBase.courses;
-
-        if (courses.size()==0){
-            System.out.println("The list of courses is empty.");
-            return;
-        }
-
-        System.out.println("List Courses : ");
-        int i=1;
-        for (Course c:courses) {
-            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
-        }
-        int itemCourse=0;
-        do {
-            System.out.print("Please select one of the courses : ");
-            itemCourse = input.nextInt();
-        }while (itemCourse>courses.size() || itemCourse<1);
-
-        Course course = courses.get(itemCourse-1);
-
         if (course.getQuizzes().size()==0){
             System.out.println("The list of quizzes is empty.");
             return;
         }
-
-        System.out.println("List quizzes : ");
-        for (int j = 0; j < course.getQuizzes().size() ; j++) {
-            System.out.println(j+"."+course.getQuizzes().get(j));
-        }
-        int itemQuiz=0;
-        do {
-            System.out.print("Please select one of the quizzes : ");
-            itemQuiz = input.nextInt();
-        }while (itemQuiz>course.getQuizzes().size() || itemQuiz<1);
-
-        DataBase.removeQuiz(course.getQuizzes().get(itemQuiz-1));
-        course.getQuizzes().remove(itemQuiz-1);
-
+        Quiz quiz = DataBase.selectQuiz(course);
+        DataBase.removeQuiz(quiz.getCode());
+        course.getQuizzes().remove(Integer.valueOf(quiz.getCode()));
+        DataBase.saveQuiz();
         System.out.println("Quiz removed successfully.");
     }
 }

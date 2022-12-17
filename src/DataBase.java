@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -126,7 +127,7 @@ public class DataBase {
         System.out.println("List Courses : ");
         int i=1;
         for (Course c:courses) {
-            System.out.println((i)+"."+c.getCode()+"\t"+ c.getName());
+            System.out.println((i++)+"."+c.getCode()+"\t"+ c.getName());
         }
         int itemCourse=0;
         do {
@@ -139,7 +140,7 @@ public class DataBase {
         System.out.println("List Quiz : ");
         for (int i = 0; i < course.getQuizzes().size(); i++) {
             Quiz quiz = new Quiz();
-            System.out.println((i) + "." + quiz.getCode());
+            System.out.println((i+1) + "." + quiz.getCode());
         }
         int itemQuiz = 0;
         do {
@@ -154,5 +155,97 @@ public class DataBase {
                 return q;
         }
         return null;
+    }
+    //////////// File Course //////////////
+    public static void saveCourse() throws IOException {
+        FileOutputStream f1 = new FileOutputStream("Courses");
+        ObjectOutputStream out = new ObjectOutputStream(f1);
+        for (Course course:courses) {
+            out.writeObject(course);
+        }
+        f1.close();
+    }
+
+    public static void readCourse() throws Exception {
+        FileInputStream f = new FileInputStream("Courses");
+        ObjectInputStream in = new ObjectInputStream(f);
+        try {
+            for (;;) {
+                courses.add((Course) in.readObject());
+                Course.increaseBaseID();
+            }
+        } catch (EOFException e) {
+            // End of stream
+        }
+        f.close();
+    }
+    //////////// File Quiz //////////////
+    public static void saveQuiz() throws IOException {
+        FileOutputStream f1 = new FileOutputStream("Quizzes");
+        ObjectOutputStream out = new ObjectOutputStream(f1);
+        for (Quiz quiz:quizzes) {
+            out.writeObject(quiz);
+        }
+        f1.close();
+    }
+
+    public static void readQuiz() throws Exception {
+        FileInputStream f = new FileInputStream("Quizzes");
+        ObjectInputStream in = new ObjectInputStream(f);
+        try {
+            for (;;) {
+                quizzes.add((Quiz) in.readObject());
+                Quiz.increaseBaseID();
+            }
+        } catch (EOFException e) {
+            // End of stream
+        }
+        f.close();
+    }
+    //////////// File Question //////////////
+    public static void saveQuestion() throws IOException {
+        FileOutputStream f1 = new FileOutputStream("Questions");
+        ObjectOutputStream out = new ObjectOutputStream(f1);
+        for (Question question:questions) {
+            out.writeObject(question);
+        }
+        f1.close();
+    }
+
+    public static void readQuestion() throws Exception {
+        FileInputStream f = new FileInputStream("Questions");
+        ObjectInputStream in = new ObjectInputStream(f);
+        try {
+            for (;;) {
+                questions.add((Question) in.readObject());
+                Question.increaseBaseID();
+            }
+        } catch (EOFException e) {
+            // End of stream
+        }
+        f.close();
+    }
+    //////////// File User //////////////
+    public static void saveUser() throws IOException {
+        FileOutputStream f1 = new FileOutputStream("Users");
+        ObjectOutputStream out = new ObjectOutputStream(f1);
+        for (User user:users) {
+            out.writeObject(user);
+        }
+        f1.close();
+    }
+
+    public static void readUser() throws Exception {
+        FileInputStream f = new FileInputStream("Users");
+        ObjectInputStream in = new ObjectInputStream(f);
+        try {
+            for (;;) {
+                users.add((User) in.readObject());
+                Question.increaseBaseID();
+            }
+        } catch (EOFException e) {
+            // End of stream
+        }
+        f.close();
     }
 }

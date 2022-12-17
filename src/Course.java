@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Course {
+public class Course implements Serializable {
     private static int baseID = 1;
     private int code;
     private String name;
@@ -54,5 +55,9 @@ public class Course {
 
     public void setQuizzes(ArrayList<Integer> quizzes) {
         this.quizzes = quizzes;
+    }
+
+    static void increaseBaseID(){
+        baseID++;
     }
 }

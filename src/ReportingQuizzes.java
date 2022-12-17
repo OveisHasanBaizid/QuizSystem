@@ -16,7 +16,7 @@ public class ReportingQuizzes {
         int item = 0;
         do {
             System.out.println("1.Average All Class");
-            System.out.println("3.Show Score Students");
+            System.out.println("2.Show Score Students");
             System.out.println("3.Back");
             System.out.print("Please select one of the options : ");
             item = input.nextInt();
@@ -34,6 +34,10 @@ public class ReportingQuizzes {
     }
 
     public void showScoreStudents() {
+        if (quiz.getStudents().size()==0){
+            System.out.println("The list of students is empty.");
+            return;
+        }
         int i = 1;
         for (Integer s : quiz.getStudents()) {
             Student student = DataBase.getStudent(s);
