@@ -110,8 +110,20 @@ public class Main {
 
     public void loginStudent() {
         System.out.println("* * * Login Student * * *");
+        String username, password;
+        input.nextLine();
+        System.out.print("Username: ");
+        username = input.nextLine();
 
-        menuTypeLogin();
+        System.out.print("Password: ");
+        password = input.nextLine();
+
+        Student student = DataBase.getStudent(username,password);
+        if (student==null){
+            System.out.println("The information entered is incorrect.");
+            menuTypeLogin();
+        }else
+            new MenuStudent(student);
     }
 
     public static void main(String[] args) {

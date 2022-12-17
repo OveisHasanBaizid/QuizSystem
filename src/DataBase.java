@@ -41,6 +41,7 @@ public class DataBase {
         users.remove(course);
         return true;
     }
+
     public static boolean existCourse(int code){
         for (Course c: courses) {
             if (c.getCode()==code)
@@ -58,6 +59,13 @@ public class DataBase {
     public static Student getStudent(int code){
         for (User u:users) {
             if (u.getCode()==code && u instanceof Student)
+                return (Student) u;
+        }
+        return null;
+    }
+    public static Student getStudent(String username , String password){
+        for (User u:users) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password) && u instanceof Student)
                 return (Student) u;
         }
         return null;
@@ -106,6 +114,13 @@ public class DataBase {
                 students.add(s);
         }
         return students;
+    }
+    public static Course getCourse(int code){
+        for (Course c:courses) {
+            if (c.getCode()==code)
+                return c;
+        }
+        return null;
     }
     public static Course selectCourse(){
         System.out.println("List Courses : ");
