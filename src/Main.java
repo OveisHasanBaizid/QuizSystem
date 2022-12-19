@@ -1,17 +1,17 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     Scanner input = new Scanner(System.in);
-
-    public Main(){
-//        try {
-//            DataBase.readCourse();
-//            DataBase.readUser();
-//            DataBase.readQuiz();
-//            DataBase.readQuestion();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
+    public Main() {
+        try {
+            DataBase.readCourse();
+            DataBase.readUser();
+            DataBase.readQuiz();
+            DataBase.readQuestion();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         startMenu();
     }
 
@@ -27,7 +27,13 @@ public class Main {
         } while (item > 3 || item < 1);
         switch (item) {
             case 1 -> menuTypeLogin();
-            case 2 -> register();
+            case 2 -> {
+                try {
+                    register();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             case 3 -> System.exit(0);
         }
         startMenu();
@@ -51,10 +57,29 @@ public class Main {
         menuTypeLogin();
     }
 
-    public void register() {
+    public void register() throws IOException {
         System.out.println("* * * Register * * *");
+        input.nextLine();
+        System.out.print("Name : ");
+        String name = input.nextLine();
+        System.out.print("username : ");
+        String username = input.nextLine();
+        System.out.print("password : ");
+        String password = input.nextLine();
 
-        menuTypeLogin();
+        Course course = DataBase.selectCourse();
+
+        Student student = new Student(username, password, name, course.getCode());
+
+        if (!DataBase.addUser(student))
+            System.out.println("The username entered is duplicate.");
+        else {
+            course.getStudents().add(student.getCode());
+            DataBase.saveUser();
+            DataBase.saveCourse();
+            System.out.println("Registration was successful.");
+            new MenuStudent(student);
+        }
     }
 
     public void loginAdmin() {
@@ -103,7 +128,7 @@ public class Main {
 
     public void ReportingAllQuizzes() {
         Course course = DataBase.selectCourse();
-        if (course.getQuizzes().size()==0){
+        if (course.getQuizzes().size() == 0) {
             System.out.println("The list of quizzes is empty.");
             return;
         }
@@ -112,7 +137,7 @@ public class Main {
             Quiz quiz = DataBase.getQuiz(integer);
             if (quiz != null)
                 System.out.println((i++) + ". Code Quiz: " + quiz.getCode() + "\tN: " + quiz.getStudents().size()
-                        + "\t" +"NP: "+ quiz.studentsParticipating()+"\tAverage: "+ quiz.getAverage());
+                        + "\t" + "NP: " + quiz.studentsParticipating() + "\tAverage: " + quiz.getAverage());
         }
     }
 
@@ -126,11 +151,11 @@ public class Main {
         System.out.print("Password: ");
         password = input.nextLine();
 
-        Student student = DataBase.getStudent(username,password);
-        if (student==null){
+        Student student = DataBase.getStudent(username, password);
+        if (student == null) {
             System.out.println("The information entered is incorrect.");
             menuTypeLogin();
-        }else
+        } else
             new MenuStudent(student);
     }
 
