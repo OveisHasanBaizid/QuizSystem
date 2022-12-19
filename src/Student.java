@@ -30,7 +30,13 @@ public class Student extends User{
     public ArrayList<ReportQuiz> getReportQuizzes() {
         return reportQuizzes;
     }
-
+    public boolean completedQuizzes(int code){
+        for (ReportQuiz r:reportQuizzes) {
+            if (r.getCodeQuiz()==code)
+                return true;
+        }
+        return false;
+    }
     public void setReportQuizzes(ArrayList<ReportQuiz> reportQuizzes) {
         this.reportQuizzes = reportQuizzes;
     }

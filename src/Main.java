@@ -4,14 +4,14 @@ public class Main {
     Scanner input = new Scanner(System.in);
 
     public Main(){
-        try {
-            DataBase.readCourse();
-            DataBase.readUser();
-            DataBase.readQuiz();
-            DataBase.readQuestion();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            DataBase.readCourse();
+//            DataBase.readUser();
+//            DataBase.readQuiz();
+//            DataBase.readQuestion();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
         startMenu();
     }
 
@@ -107,11 +107,11 @@ public class Main {
             System.out.println("The list of quizzes is empty.");
             return;
         }
-        int i = 0;
+        int i = 1;
         for (Integer integer : course.getQuizzes()) {
             Quiz quiz = DataBase.getQuiz(integer);
             if (quiz != null)
-                System.out.println((i++) + "." + quiz.getCode() + "\tN: " + quiz.getStudents().size()
+                System.out.println((i++) + ". Code Quiz: " + quiz.getCode() + "\tN: " + quiz.getStudents().size()
                         + "\t" +"NP: "+ quiz.studentsParticipating()+"\tAverage: "+ quiz.getAverage());
         }
     }

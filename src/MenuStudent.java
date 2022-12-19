@@ -32,11 +32,15 @@ public class MenuStudent {
     }
     public void listQuizzes() throws IOException {
         Course course = DataBase.getCourse(student.getCourse());
-        if (course== null || course.getQuizzes().size()==0){
+        if (course== null || course.getQuizzes().size()==0 || student.getReportQuizzes().size() == course.getQuizzes().size()){
             System.out.println("The list of quizzes is empty.");
             return;
         }
         Quiz quiz = DataBase.selectQuiz(course);
+        if (student.completedQuizzes(quiz.getCode())){
+            System.out.println("This quiz has already been done.");
+            return;
+        }
         startQuiz(quiz);
     }
     public void startQuiz(Quiz quiz) throws IOException {
@@ -54,11 +58,13 @@ public class MenuStudent {
                 System.out.println((i+1)+" of "+quiz.getQuestions().size()+" . "+question.getText());
                 System.out.print("Answer : ");
                 answer = input.nextLine();
-                if (question.getText().compareToIgnoreCase(answer)==0)
+                if (question.getAnswer().compareToIgnoreCase(answer)==0)
                     score+=question.getScore();
             }
         }
         student.getReportQuizzes().add(new ReportQuiz(quiz.getCode(),score));
+        quiz.getStudents().add(student.getCode());
+        DataBase.saveQuiz();
         DataBase.saveUser();
         System.out.println("Quiz score : "+score);
     }
@@ -71,10 +77,10 @@ public class MenuStudent {
         int i =1;
         for (Integer integer:course.getQuizzes()) {
             Quiz quiz = DataBase.getQuiz(integer);
-            if (quiz!=null){
+            if (quiz!=null ){
                 quiz.calculateAverage();
                 float score = student.getScoreQuiz(quiz.getCode());
-                System.out.println((i++)+"."+quiz.getCode()+"\tScore: "
+                System.out.println((i++)+".\tCode: "+quiz.getCode()+"\tScore: "
                         +(score==-1.0f?"Absent":score+"") + "\tAverage: "+ quiz.getAverage());
             }
         }

@@ -1,4 +1,6 @@
-public class ReportQuiz {
+import java.io.Serializable;
+
+public class ReportQuiz implements Serializable {
     private int codeQuiz;
     private float score;
 

@@ -43,7 +43,7 @@ public class ReportingQuizzes {
             Student student = DataBase.getStudent(s);
             if (student != null) {
                 float score = student.getScoreQuiz(quiz.getCode());
-                if (score != -1)
+                if (score == -1)
                     System.out.println((i++)+"."+student.getCode()+"\t"+"Absent");
                 else
                     System.out.println((i++)+"."+student.getCode()+"\t"+score);
