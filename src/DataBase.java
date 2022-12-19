@@ -31,7 +31,7 @@ public class DataBase {
         return false;
     }
     public static boolean addCourse(Course course){
-        if (existProfessor(course.getProfessor()))
+        if (!existProfessor(course.getProfessor()))
             return false;
         courses.add(course);
         return true;
@@ -139,15 +139,16 @@ public class DataBase {
     public static Quiz selectQuiz(Course course) {
         System.out.println("List Quiz : ");
         for (int i = 0; i < course.getQuizzes().size(); i++) {
-            Quiz quiz = new Quiz();
-            System.out.println((i+1) + "." + quiz.getCode());
+            Quiz quiz = DataBase.getQuiz(course.getQuizzes().get(i));
+            if (quiz!=null)
+                System.out.println((i+1) + "." + quiz.getCode());
         }
-        int itemQuiz = 0;
+        int item = 0;
         do {
             System.out.print("Please select one of the quizzes : ");
-            itemQuiz = input.nextInt();
-        } while (itemQuiz > course.getQuizzes().size() || itemQuiz < 1);
-        return DataBase.getQuiz(course.getQuizzes().get(itemQuiz - 1));
+            item = input.nextInt();
+        } while (item > course.getQuizzes().size() || item < 1);
+        return getQuiz(course.getQuizzes().get(item - 1));
     }
     public static Question getQuestion(int code){
         for (Question q:questions) {

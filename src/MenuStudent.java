@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuStudent {
@@ -5,9 +6,13 @@ public class MenuStudent {
     Scanner input = new Scanner(System.in);
     public MenuStudent(Student student) {
         this.student = student;
-        menu();
+        try {
+            menu();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void menu(){
+    public void menu() throws IOException {
         System.out.println("* * * Menu Student * * *");
         int item = 0;
         do {
@@ -25,22 +30,23 @@ public class MenuStudent {
         }
         menu();
     }
-    public void listQuizzes(){
-        Course course = DataBase.getCourse(student.getCode());
-        if (course!= null && course.getQuizzes().size()==0){
+    public void listQuizzes() throws IOException {
+        Course course = DataBase.getCourse(student.getCourse());
+        if (course== null || course.getQuizzes().size()==0){
             System.out.println("The list of quizzes is empty.");
             return;
         }
         Quiz quiz = DataBase.selectQuiz(course);
         startQuiz(quiz);
     }
-    public void startQuiz(Quiz quiz){
+    public void startQuiz(Quiz quiz) throws IOException {
         System.out.println("* * * Start Quiz * * *");
         if (quiz.getQuestions().size()==0){
             System.out.println("The list of questions in this quiz is empty");
             return;
         }
         String answer="";
+        input.nextLine();
         float score = 0;
         for (int i = 0; i < quiz.getQuestions().size() ; i++) {
             Question question = DataBase.getQuestion(quiz.getQuestions().get(i));
@@ -53,12 +59,13 @@ public class MenuStudent {
             }
         }
         student.getReportQuizzes().add(new ReportQuiz(quiz.getCode(),score));
+        DataBase.saveUser();
         System.out.println("Quiz score : "+score);
     }
     public void historyQuizzes(){
-        Course course = DataBase.getCourse(student.getCode());
-        if (course!=null && course.getQuizzes().size()==0){
-            System.out.println("The list of quizzes is empty.");
+        Course course = DataBase.getCourse(student.getCourse());
+        if (course==null || course.getQuizzes().size()==0){
+            System.out.println("The list of history quizzes is empty.");
             return;
         }
         int i =1;

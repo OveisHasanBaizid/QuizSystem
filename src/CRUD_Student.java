@@ -45,11 +45,13 @@ public class CRUD_Student {
         Course course = DataBase.selectCourse();
 
         Student student = new Student(username,password,name,course.getCode());
+
         if (!DataBase.addUser(student))
             System.out.println("The username entered is duplicate.");
         else {
             course.getStudents().add(student.getCode());
             DataBase.saveUser();
+            DataBase.saveCourse();
             System.out.println("Student added successfully.");
         }
     }
@@ -82,6 +84,7 @@ public class CRUD_Student {
         course.getStudents().remove(student.getCode());
         DataBase.removeUser(student);
         DataBase.saveUser();
+        DataBase.saveCourse();
         System.out.println("Student removed successfully.");
     }
     public Student selectStudent(Course course){

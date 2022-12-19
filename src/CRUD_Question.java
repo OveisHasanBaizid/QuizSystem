@@ -51,6 +51,7 @@ public class CRUD_Question {
         float score = input.nextFloat();
         Question question = new Question(text, answer, score);
         quiz.getQuestions().add(question.getCode());
+        DataBase.questions.add(question);
         DataBase.saveQuestion();
         DataBase.saveQuiz();
         System.out.println("Question added successfully.");

@@ -66,6 +66,7 @@ public class CRUD_Quiz {
         DataBase.removeQuiz(quiz.getCode());
         course.getQuizzes().remove(Integer.valueOf(quiz.getCode()));
         DataBase.saveQuiz();
+        DataBase.saveCourse();
         System.out.println("Quiz removed successfully.");
     }
 }

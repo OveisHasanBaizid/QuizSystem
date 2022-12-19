@@ -12,7 +12,7 @@ public class Quiz implements Serializable {
         this.code = baseID++;
         this.questions = new ArrayList<>();
         this.students = new ArrayList<>();
-        average = 0;
+        this.average = 0;
     }
 
     public int getCode() {
